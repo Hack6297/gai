@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>gai alpha 0</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://unpkg.com/xp.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="desktop" aria-label="GabeAI desktop">
+      <section class="window gabe-window" aria-label="GabeAI chat window">
+        <div class="title-bar">
+          <div class="title-bar-text">gai Messenger - alpha 0</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+
+        <div class="window-body">
+          <nav class="menu-bar" aria-label="Menu">
+            <button>File</button>
+            <button>Edit</button>
+            <button>Search</button>
+            <button>Help</button>
+          </nav>
+
+          <div class="app-shell">
+            <aside class="side-panel">
+              <div class="xp-card">
+                <h2>gai</h2>
+                <p id="modelStatus">Checking model...</p>
+              </div>
+
+              <fieldset>
+                <legend>Search</legend>
+                <label class="field-row checkbox-row">
+                  <input id="useSearch" type="checkbox" checked>
+                  <span>Use no-key web search when needed</span>
+                </label>
+              </fieldset>
+
+              <div class="xp-card source-card">
+                <h2>Sources</h2>
+                <ol id="sourceList"></ol>
+              </div>
+            </aside>
+
+            <section class="chat-panel" aria-label="Chat">
+              <div id="messages" class="messages" role="log" aria-live="polite">
+                <article class="message assistant">
+                  <div class="message-name">gai</div>
+                  <p>Ask me something. I can answer directly and use no-key web search when I need current information.</p>
+                </article>
+              </div>
+
+              <form id="chatForm" class="composer">
+                <textarea id="prompt" rows="3" placeholder="Type a question for GabeAI..."></textarea>
+                <div class="composer-actions">
+                  <button type="button" id="exampleBtn">Example</button>
+                  <button type="button" id="clearBtn">Clear</button>
+                  <button type="submit" class="primary">Ask gai</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <footer class="taskbar" aria-label="Windows taskbar">
+        <button class="start-button">start</button>
+        <div class="taskbar-item active">gai Messenger</div>
+        <time id="clock"></time>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

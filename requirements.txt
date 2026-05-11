@@ -1,0 +1,3 @@
+# GabeAI uses only Python standard library modules for hosting/search.
+# PyTorch is optional. Install torch locally only if you want to experiment
+# with the tiny neural sampler in gabeai_model.py.
