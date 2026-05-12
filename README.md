@@ -1,8 +1,11 @@
-# gai alpha 0
+# gai build 50
 
 gai is a local Python web app with:
 
-- a Windows XP style chat UI in `index.html`
+- a Longhorn-blue clay-glass chat UI in `index.html`
+- saved browser chats with New Chat and Delete Chat
+- calculator answers for arithmetic and square roots
+- live no-key weather and news helpers
 - `background.jpg` used as the desktop wallpaper
 - a tiny PyTorch Transformer scaffold named `TinyGabeTransformer`
 - a no-key web search reader that ranks and cites the closest pages

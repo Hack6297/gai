@@ -14,7 +14,7 @@ DEFAULT_PORT = 8765
 
 
 class GabeAIRequestHandler(SimpleHTTPRequestHandler):
-    server_version = "gai/0.1"
+    server_version = "gai/50"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(APP_DIR), **kwargs)
