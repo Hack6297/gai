@@ -1,11 +1,8 @@
-# gai build 50
+# GabeAI alpha 0
 
-gai is a local Python web app with:
+GabeAI is a local Python web app with:
 
-- a Longhorn-blue clay-glass chat UI in `index.html`
-- saved browser chats with New Chat and Delete Chat
-- calculator answers for arithmetic and square roots
-- live no-key weather and news helpers
+- a Windows XP style chat UI in `index.html`
 - `background.jpg` used as the desktop wallpaper
 - a tiny PyTorch Transformer scaffold named `TinyGabeTransformer`
 - a no-key web search reader that ranks and cites the closest pages
@@ -31,7 +28,7 @@ GitHub account: `Hack6297`
 GitHub repository name:
 
 ```text
-gai
+GabeAI
 ```
 
 Render build command:
@@ -62,12 +59,12 @@ The bundled Python here may be newer than current PyTorch wheels. If installatio
 
 ## Search
 
-gai does not require API keys. It uses DuckDuckGo HTML search as a fallback when a question needs current or outside information. Simple questions are answered directly without showing search-result clutter in the chat.
+GabeAI does not require API keys. It uses DuckDuckGo HTML search as a fallback when a question needs current or outside information. Simple questions are answered directly without showing search-result clutter in the chat.
 
 ## Files
 
 - `app.py` - local server and API routes
-- `gabeai_model.py` - gai engine and tiny PyTorch model
+- `gabeai_model.py` - GabeAI engine and tiny PyTorch model
 - `web_search.py` - DuckDuckGo search, page text extraction, ranking
 - `index.html` - Windows XP style chat screen
 - `style.css` - XP desktop layout using `background.jpg`

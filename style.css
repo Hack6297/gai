@@ -1,13 +1,11 @@
 :root {
-  --longhorn-1: #082f72;
-  --longhorn-2: #1364b8;
-  --longhorn-3: #69b5ff;
-  --glass: rgba(231, 244, 255, 0.72);
-  --glass-deep: rgba(114, 177, 238, 0.42);
-  --glass-edge: rgba(255, 255, 255, 0.72);
-  --ink: #061426;
-  --muted: #31506c;
-  --danger: #9f1f3c;
+  --xp-blue: #245edb;
+  --xp-blue-dark: #1941a5;
+  --xp-green: #39a33a;
+  --panel: #ece9d8;
+  --panel-deep: #d6d2be;
+  --ink: #111;
+  --muted: #4d4d4d;
 }
 
 * {
@@ -23,20 +21,14 @@ body {
 body {
   overflow: hidden;
   color: var(--ink);
-  background:
-    linear-gradient(135deg, rgba(4, 28, 73, 0.18), rgba(104, 190, 255, 0.22)),
-    #4683d8 url("background.jpg") center center / cover no-repeat fixed;
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  background: #4683d8 url("background.jpg") center center / cover no-repeat fixed;
+  font-family: "Tahoma", "Trebuchet MS", Arial, sans-serif;
 }
 
 button,
 textarea,
 select {
   font-family: inherit;
-}
-
-button {
-  cursor: pointer;
 }
 
 .desktop {
@@ -47,59 +39,12 @@ button {
 }
 
 .gabe-window {
-  width: min(1120px, calc(100vw - 56px));
-  height: min(760px, calc(100vh - 96px));
+  width: min(1040px, calc(100vw - 56px));
+  height: min(720px, calc(100vh - 96px));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border: 1px solid rgba(210, 238, 255, 0.86);
-  border-radius: 9px 9px 5px 5px;
-  background: rgba(196, 225, 251, 0.58);
-  box-shadow:
-    0 24px 52px rgba(0, 17, 55, 0.38),
-    0 0 0 1px rgba(255, 255, 255, 0.28) inset;
-  backdrop-filter: blur(14px) saturate(1.2);
-}
-
-.glass-title {
-  min-height: 34px;
-  border-radius: 8px 8px 0 0;
-  background:
-    linear-gradient(180deg, rgba(230, 249, 255, 0.94), rgba(90, 170, 244, 0.84) 38%, rgba(16, 88, 177, 0.92) 39%, rgba(5, 49, 127, 0.95)),
-    linear-gradient(90deg, var(--longhorn-1), var(--longhorn-2));
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 -1px 0 rgba(0, 34, 94, 0.8) inset;
-}
-
-.title-bar-text {
-  font-size: 13px;
-  letter-spacing: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-}
-
-.title-bar-controls {
-  gap: 4px;
-}
-
-.title-bar-controls button {
-  width: 23px;
-  height: 23px;
-  border: 1px solid rgba(255, 255, 255, 0.88);
-  border-radius: 6px;
-  background:
-    radial-gradient(circle at 35% 20%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2) 35%, transparent 37%),
-    linear-gradient(180deg, #aee0ff, #237bd4 50%, #0a3c94);
-  box-shadow:
-    0 1px 1px rgba(255, 255, 255, 0.82) inset,
-    0 1px 4px rgba(0, 20, 74, 0.5);
-}
-
-.title-bar-controls button[aria-label="Close"] {
-  background:
-    radial-gradient(circle at 35% 20%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.14) 35%, transparent 37%),
-    linear-gradient(180deg, #ffbd9d, #e25135 50%, #9d1f16);
+  box-shadow: 8px 12px 28px rgba(0, 0, 0, 0.32);
 }
 
 .gabe-window .window-body {
@@ -108,41 +53,34 @@ button {
   min-height: 0;
   flex-direction: column;
   margin: 0;
-  padding: 10px;
-  background: linear-gradient(180deg, rgba(230, 244, 255, 0.62), rgba(181, 218, 248, 0.66));
+  padding: 8px;
+  background: var(--panel);
 }
 
-.glass-strip {
+.menu-bar {
   display: flex;
-  gap: 4px;
-  margin-bottom: 10px;
-  padding: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.58);
-  border-radius: 7px;
-  background: rgba(225, 243, 255, 0.48);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  gap: 2px;
+  margin-bottom: 8px;
 }
 
 .menu-bar button {
-  min-width: 52px;
-  padding: 4px 10px;
+  min-width: 48px;
+  padding: 3px 8px;
   border: 1px solid transparent;
-  border-radius: 5px;
-  color: #07305f;
   background: transparent;
   box-shadow: none;
   text-align: left;
 }
 
 .menu-bar button:hover {
-  border-color: rgba(85, 148, 220, 0.82);
-  background: rgba(255, 255, 255, 0.58);
+  border-color: #7f9db9;
+  background: #fff;
 }
 
 .app-shell {
   display: grid;
-  grid-template-columns: 285px minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 8px;
   flex: 1;
   min-height: 0;
 }
@@ -155,31 +93,23 @@ button {
 .side-panel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .xp-card,
-fieldset,
-.chat-panel {
-  border: 1px solid rgba(255, 255, 255, 0.66);
-  border-radius: 8px;
-  background: var(--glass);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.72) inset,
-    0 8px 22px rgba(14, 53, 106, 0.16);
-  backdrop-filter: blur(10px);
+fieldset {
+  background: #f7f5e8;
 }
 
 .xp-card {
+  border: 1px solid #aca899;
   padding: 10px;
 }
 
-.xp-card h2,
-.panel-heading h2 {
+.xp-card h2 {
   margin: 0 0 6px;
   font-size: 14px;
   line-height: 1.25;
-  color: #082d66;
 }
 
 .xp-card p {
@@ -189,81 +119,30 @@ fieldset,
   line-height: 1.4;
 }
 
-.identity-card {
-  background: linear-gradient(180deg, rgba(241, 250, 255, 0.86), rgba(188, 223, 251, 0.62));
-}
-
-.chat-card {
-  min-height: 178px;
-}
-
-.panel-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.panel-heading h2 {
-  margin: 0;
-}
-
-.chat-list {
-  display: grid;
-  gap: 6px;
-  max-height: 190px;
-  overflow: auto;
-  padding-right: 2px;
-}
-
-.chat-tab {
-  display: grid;
-  gap: 2px;
-  width: 100%;
-  padding: 8px;
-  border: 1px solid rgba(93, 153, 219, 0.52);
-  border-radius: 7px;
-  color: #08213d;
-  background: rgba(255, 255, 255, 0.5);
-  text-align: left;
-}
-
-.chat-tab.active {
-  border-color: rgba(26, 93, 182, 0.88);
-  background: linear-gradient(180deg, rgba(214, 239, 255, 0.92), rgba(110, 181, 246, 0.46));
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55) inset;
-}
-
-.chat-tab span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.chat-tab small {
-  color: var(--muted);
-  font-size: 11px;
-}
-
 fieldset {
   margin: 0;
   padding: 10px;
 }
 
-legend {
-  color: #063279;
-}
-
-.field-row {
+.field-row,
+.field-row-stacked {
   font-size: 12px;
 }
 
 .checkbox-row {
   align-items: flex-start;
   gap: 6px;
+}
+
+.field-row-stacked {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+select {
+  width: 100%;
+  min-height: 24px;
 }
 
 .source-card {
@@ -284,63 +163,62 @@ legend {
 }
 
 .source-card a {
-  color: #0048ad;
+  color: #003cbd;
   word-break: break-word;
 }
 
 .score {
   display: block;
-  color: #4a6280;
+  color: #666;
   font-size: 11px;
 }
 
 .chat-panel {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  overflow: hidden;
+  border: 1px solid #aca899;
+  background: #fff;
 }
 
 .messages {
   min-height: 0;
-  padding: 14px;
+  padding: 12px;
   overflow: auto;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(223, 239, 255, 0.7)),
-    rgba(255, 255, 255, 0.48);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(241, 245, 255, 0.95)),
+    #fff;
 }
 
 .message {
-  width: min(760px, 100%);
+  width: min(720px, 100%);
   margin: 0 0 12px;
-  padding: 10px 11px;
-  border: 1px solid rgba(115, 171, 231, 0.66);
-  border-radius: 8px;
-  background: rgba(245, 251, 255, 0.72);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 8px 18px rgba(20, 71, 132, 0.12);
+  padding: 9px 10px;
+  border: 1px solid #b8c7e8;
+  background: #f5f8ff;
+  box-shadow: 1px 1px 0 #fff inset;
 }
 
 .message.user {
   margin-left: auto;
-  border-color: rgba(52, 135, 115, 0.55);
-  background: rgba(235, 255, 249, 0.72);
+  border-color: #98bb87;
+  background: #f4fff0;
 }
 
 .message.loading {
-  color: #43556a;
-  background: rgba(255, 251, 226, 0.82);
-  border-color: rgba(212, 174, 79, 0.72);
+  color: #555;
+  background: #fffbe6;
+  border-color: #d6c46d;
 }
 
 .message-name {
   margin-bottom: 5px;
-  color: #004aa2;
+  color: #003cbd;
   font-weight: 700;
   font-size: 12px;
 }
 
-.message p {
+.message p,
+.message pre {
   margin: 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -349,20 +227,17 @@ legend {
 }
 
 .composer {
-  border-top: 1px solid rgba(91, 148, 211, 0.44);
-  padding: 10px;
-  background: rgba(213, 235, 253, 0.72);
+  border-top: 1px solid #aca899;
+  padding: 8px;
+  background: var(--panel);
 }
 
 .composer textarea {
   display: block;
   width: 100%;
-  min-height: 78px;
+  min-height: 76px;
   resize: vertical;
-  padding: 8px;
-  border: 1px solid rgba(71, 129, 198, 0.72);
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.76);
+  padding: 7px;
   font-size: 13px;
   line-height: 1.4;
 }
@@ -374,36 +249,13 @@ legend {
   margin-top: 8px;
 }
 
-.composer-actions button,
-.panel-heading button,
-.danger-button {
+.composer-actions button {
   min-width: 82px;
-  padding: 5px 10px;
-  border: 1px solid rgba(49, 112, 191, 0.76);
-  border-radius: 7px;
-  color: #062a59;
-  background:
-    radial-gradient(circle at 35% 20%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.24) 35%, transparent 37%),
-    linear-gradient(180deg, rgba(221, 246, 255, 0.98), rgba(95, 172, 240, 0.74) 52%, rgba(20, 93, 186, 0.74));
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.84) inset,
-    0 3px 8px rgba(5, 50, 120, 0.24);
-  font-size: 12px;
 }
 
 .composer-actions .primary {
-  min-width: 104px;
+  min-width: 110px;
   font-weight: 700;
-}
-
-.danger-button {
-  width: 100%;
-  margin-top: 8px;
-  color: #4f0619;
-  border-color: rgba(167, 45, 77, 0.72);
-  background:
-    radial-gradient(circle at 35% 20%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.16) 35%, transparent 37%),
-    linear-gradient(180deg, rgba(255, 230, 239, 0.98), rgba(238, 128, 156, 0.64) 52%, rgba(180, 49, 86, 0.68));
 }
 
 .taskbar {
@@ -414,28 +266,24 @@ legend {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 42px;
+  height: 40px;
   padding: 4px 10px;
-  background:
-    linear-gradient(180deg, rgba(163, 221, 255, 0.88), rgba(42, 123, 213, 0.94) 48%, rgba(13, 65, 158, 0.98) 49%, rgba(19, 83, 184, 0.98));
+  background: linear-gradient(#3169e6, #174cbd 48%, #0b3a9d 49%, #194ec0);
   color: #fff;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.55) inset,
-    0 -1px 0 rgba(0, 35, 100, 0.55) inset;
-  backdrop-filter: blur(12px);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.35) inset;
 }
 
 .start-button {
-  min-width: 86px;
-  height: 31px;
+  min-width: 84px;
+  height: 30px;
   padding: 0 16px 1px 28px;
   color: #fff;
   border: 1px solid #1b6d1b;
-  border-radius: 17px 8px 8px 17px;
+  border-radius: 16px 7px 7px 16px;
   background:
-    radial-gradient(circle at 18px 14px, #eaffdf 0 4px, transparent 5px),
-    linear-gradient(#7ce678, #2f9b2f 48%, #1f7c1f 49%, #3cb33c);
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.62) inset;
+    radial-gradient(circle at 18px 14px, #dfffd8 0 4px, transparent 5px),
+    linear-gradient(#73d970, #2f9b2f 48%, #1f7c1f 49%, #3cb33c);
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5) inset;
   font-size: 17px;
   font-style: italic;
   font-weight: 700;
@@ -444,16 +292,15 @@ legend {
 
 .taskbar-item {
   width: 190px;
-  padding: 7px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  border-radius: 5px;
-  background: linear-gradient(#6db5fb, #245edb);
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.38) inset;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(#4e87ed, #245edb);
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35) inset;
   font-size: 12px;
 }
 
 .taskbar-item.active {
-  background: linear-gradient(#2c77d6, #123f9d);
+  background: linear-gradient(#1b4cbe, #123f9d);
 }
 
 #clock {

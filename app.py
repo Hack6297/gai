@@ -14,13 +14,13 @@ DEFAULT_PORT = 8765
 
 
 class GabeAIRequestHandler(SimpleHTTPRequestHandler):
-    server_version = "gai/50"
+    server_version = "GabeAI/0.1"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(APP_DIR), **kwargs)
 
     def log_message(self, fmt, *args):
-        sys.stdout.write("[gai] " + (fmt % args) + "\n")
+        sys.stdout.write("[GabeAI] " + (fmt % args) + "\n")
 
     def do_GET(self):
         if self.path == "/":
@@ -92,7 +92,7 @@ def run(host=DEFAULT_HOST, port=DEFAULT_PORT):
     os.chdir(APP_DIR)
     server = ThreadingHTTPServer((host, port), GabeAIRequestHandler)
     server.engine = GabeAIEngine(APP_DIR)
-    print(f"gai is running at http://{host}:{port}")
+    print(f"GabeAI is running at http://{host}:{port}")
     print("Press Ctrl+C to stop.")
     try:
         server.serve_forever()
