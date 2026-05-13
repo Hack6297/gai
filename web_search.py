@@ -1,4 +1,5 @@
 import html
+import json
 import re
 import urllib.parse
 import urllib.request
@@ -93,9 +94,36 @@ class SearchClient:
     def status(self):
         return {
             "provider": "DuckDuckGo HTML",
+            "weatherProvider": "wttr.in",
             "requiresApiKey": False,
-            "codeVersion": "no-api-search-0.3",
+            "codeVersion": "no-api-search-0.4-live",
             "searchFile": __file__,
+        }
+
+    def fetch_weather(self, location):
+        clean_location = " ".join((location or "").split()) or "your area"
+        url = "https://wttr.in/" + urllib.parse.quote(clean_location) + "?format=j1"
+        data = self.read_url(url, limit=250000)
+        payload = json.loads(data)
+        current = (payload.get("current_condition") or [{}])[0]
+        area = (((payload.get("nearest_area") or [{}])[0].get("areaName") or [{}])[0].get("value") or clean_location)
+        region = (((payload.get("nearest_area") or [{}])[0].get("region") or [{}])[0].get("value") or "")
+        country = (((payload.get("nearest_area") or [{}])[0].get("country") or [{}])[0].get("value") or "")
+        place_bits = [part for part in [area, region, country] if part]
+        place = ", ".join(dict.fromkeys(place_bits))
+        description = ((current.get("weatherDesc") or [{}])[0].get("value") or "unknown").lower()
+        feels = current.get("FeelsLikeF", "")
+        temp = current.get("temp_F", "")
+        humidity = current.get("humidity", "")
+        wind = current.get("windspeedMiles", "")
+        return {
+            "place": place or clean_location,
+            "description": description,
+            "tempF": temp,
+            "feelsLikeF": feels,
+            "humidity": humidity,
+            "windMph": wind,
+            "url": "https://wttr.in/" + urllib.parse.quote(clean_location),
         }
 
     def search_and_read(self, query, provider="auto", top_k=5):

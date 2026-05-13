@@ -1,8 +1,11 @@
-# GabeAI alpha 0
+# GabeAI build 50
 
 GabeAI is a local Python web app with:
 
-- a Windows XP style chat UI in `index.html`
+- a Longhorn-blue clay-glass chat UI in `index.html`
+- saved browser chats with New Chat and Delete Chat
+- calculator answers for arithmetic and square roots
+- live no-key weather and news helpers
 - `background.jpg` used as the desktop wallpaper
 - a tiny PyTorch Transformer scaffold named `TinyGabeTransformer`
 - a no-key web search reader that ranks and cites the closest pages
@@ -11,7 +14,7 @@ GabeAI is a local Python web app with:
 ## Run
 
 ```powershell
-cd "C:\Users\Admin\Documents\GabeAI\GabeAI build alpha 0"
+cd "C:\Users\Admin\Documents\GabeAI\GabeAI build alpha 50"
 python app.py
 ```
 

@@ -3,6 +3,8 @@ import math
 import os
 import random
 import re
+import ast
+import operator
 from datetime import datetime
 from pathlib import Path
 
@@ -36,6 +38,21 @@ DATE_RE = re.compile(
     re.IGNORECASE,
 )
 RELEASE_WORDS = {"release", "released", "publication", "published", "expected", "planned", "available", "preorder", "pre-order"}
+MATH_INTENT_RE = re.compile(r"\b(calculate|solve|math|what is|what's|square root|sqrt|plus|minus|times|divided|multiply|add|subtract)\b", re.IGNORECASE)
+WEATHER_INTENT_RE = re.compile(r"\b(weather|temperature|forecast|rain|snow|windy|humidity)\b", re.IGNORECASE)
+NEWS_INTENT_RE = re.compile(r"\b(news|headlines|latest|breaking|what happened|current events)\b", re.IGNORECASE)
+MATH_CHARS_RE = re.compile(r"^[0-9\s\.\+\-\*\/\%\(\),\^]+$")
+SAFE_OPERATORS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.FloorDiv: operator.floordiv,
+    ast.Mod: operator.mod,
+    ast.Pow: operator.pow,
+    ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
+}
 
 
 class GabeTokenizer:
@@ -156,8 +173,8 @@ class GabeAIEngine:
         status.update(
             {
                 "name": "GabeAI",
-                "version": "alpha-0",
-                "codeVersion": "alpha-0.4-release-date-answers",
+                "version": "build-50",
+                "codeVersion": "build-50-live-math-chats",
                 "engineFile": __file__,
                 "search": self.search.status(),
             }
@@ -175,6 +192,26 @@ class GabeAIEngine:
                 "torch": self.model.status(),
                 "neuralTrace": "",
             }
+
+        math_answer = self._math_answer(clean_question)
+        if math_answer:
+            return {
+                "answer": math_answer,
+                "sources": [],
+                "provider": "calculator",
+                "torch": self.model.status(),
+                "neuralTrace": "",
+            }
+
+        if WEATHER_INTENT_RE.search(clean_question):
+            weather_response = self._weather_answer(clean_question)
+            if weather_response:
+                return weather_response
+
+        if NEWS_INTENT_RE.search(clean_question):
+            news_response = self._news_answer(clean_question, top_k=top_k)
+            if news_response:
+                return news_response
 
         evidence = []
         provider_used = "none"
@@ -210,7 +247,7 @@ class GabeAIEngine:
         lower = question.lower()
         if lower in {"who are you", "who are you?", "what are you", "what are you?"}:
             return (
-                "I am GabeAI alpha 0, a local Python assistant. I can answer from simple "
+                "I am GabeAI build 50, a local Python assistant. I can answer from simple "
                 "built-in knowledge and use no-key web search when I need extra context."
             )
 
@@ -239,7 +276,7 @@ class GabeAIEngine:
         lower = question.lower().strip()
         if lower in {"who are you", "who are you?", "what are you", "what are you?"}:
             return (
-                "I am GabeAI alpha 0, a local Python assistant. I can answer from simple "
+                "I am GabeAI build 50, a local Python assistant. I can answer from simple "
                 "built-in knowledge and use no-key web search when I need extra context."
             )
         if SKY_COLOR_RE.search(question):
@@ -247,6 +284,146 @@ class GabeAIEngine:
         if "what is your name" in lower or "your name" == lower:
             return "My name is GabeAI."
         return ""
+
+    def _math_answer(self, question):
+        expression = self._extract_math_expression(question)
+        if not expression:
+            return ""
+        try:
+            value = self._safe_eval_math(expression)
+        except Exception:
+            return ""
+        return f"The answer is {self._format_number(value)}."
+
+    def _extract_math_expression(self, question):
+        lower = question.lower().strip()
+        sqrt_match = re.search(r"(?:square root of|sqrt of|sqrt)\s+(-?\d+(?:\.\d+)?)", lower)
+        if sqrt_match:
+            return f"sqrt({sqrt_match.group(1)})"
+
+        expression = lower
+        replacements = {
+            "what is": "",
+            "what's": "",
+            "calculate": "",
+            "solve": "",
+            "please": "",
+            "plus": "+",
+            "minus": "-",
+            "times": "*",
+            "multiplied by": "*",
+            "multiply by": "*",
+            "x": "*",
+            "divided by": "/",
+            "over": "/",
+            "to the power of": "^",
+        }
+        for old, new in replacements.items():
+            expression = expression.replace(old, new)
+        expression = expression.replace("?", "").replace("=", "").strip()
+
+        if expression.startswith("sqrt("):
+            return expression
+        if not MATH_INTENT_RE.search(question) and not re.search(r"\d\s*[\+\-\*\/\^]\s*\d", expression):
+            return ""
+        if MATH_CHARS_RE.match(expression) and re.search(r"\d", expression):
+            return expression
+        return ""
+
+    def _safe_eval_math(self, expression):
+        if expression.startswith("sqrt(") and expression.endswith(")"):
+            inner = float(expression[5:-1])
+            if inner < 0:
+                raise ValueError("negative square root")
+            return math.sqrt(inner)
+        parsed = ast.parse(expression.replace("^", "**"), mode="eval")
+        return self._eval_math_node(parsed.body)
+
+    def _eval_math_node(self, node):
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in SAFE_OPERATORS:
+            left = self._eval_math_node(node.left)
+            right = self._eval_math_node(node.right)
+            if isinstance(node.op, ast.Pow) and abs(right) > 12:
+                raise ValueError("power too large")
+            return SAFE_OPERATORS[type(node.op)](left, right)
+        if isinstance(node, ast.UnaryOp) and type(node.op) in SAFE_OPERATORS:
+            return SAFE_OPERATORS[type(node.op)](self._eval_math_node(node.operand))
+        raise ValueError("unsupported math")
+
+    def _format_number(self, value):
+        if isinstance(value, float) and value.is_integer():
+            return str(int(value))
+        return f"{value:.10g}"
+
+    def _weather_answer(self, question):
+        location = self._extract_weather_location(question)
+        try:
+            weather = self.search.fetch_weather(location)
+        except Exception:
+            return None
+        answer = (
+            f"The weather in {weather['place']} is {weather['description']}, "
+            f"{weather['tempF']}°F, feeling like {weather['feelsLikeF']}°F. "
+            f"Humidity is {weather['humidity']}%, and wind is {weather['windMph']} mph."
+        )
+        return {
+            "answer": answer,
+            "sources": [
+                {
+                    "title": "wttr.in weather",
+                    "url": weather["url"],
+                    "snippet": answer,
+                    "pageText": "",
+                    "score": 1,
+                }
+            ],
+            "provider": "wttr.in",
+            "torch": self.model.status(),
+            "neuralTrace": "",
+        }
+
+    def _extract_weather_location(self, question):
+        match = re.search(r"\b(?:in|for|at)\s+(.+?)(?:\?|$)", question, re.IGNORECASE)
+        if match:
+            location = match.group(1).strip()
+            location = re.sub(r"\b(today|right now|now|please)\b", "", location, flags=re.IGNORECASE).strip(" ,")
+            if location:
+                return location
+        return "United States"
+
+    def _news_answer(self, question, top_k=5):
+        query = self._news_query(question)
+        try:
+            evidence, provider = self.search.search_and_read(query, provider="duckduckgo", top_k=max(3, min(top_k, 6)))
+        except Exception:
+            return None
+        if not evidence:
+            return None
+        lines = []
+        for item in evidence[:3]:
+            clean_title = self._clean_title(item.title)
+            snippet = item.snippet.strip()
+            if snippet:
+                lines.append(f"{clean_title}: {snippet}")
+            else:
+                lines.append(clean_title)
+        answer = "Here are the latest matching news results I found:\n" + "\n".join(f"- {line}" for line in lines)
+        return {
+            "answer": answer,
+            "sources": [item.to_dict() for item in evidence],
+            "provider": provider,
+            "torch": self.model.status(),
+            "neuralTrace": "",
+        }
+
+    def _news_query(self, question):
+        cleaned = re.sub(r"\b(show me|tell me|what is|what's|latest|breaking|news|headlines|about|on|for)\b", " ", question, flags=re.IGNORECASE)
+        cleaned = " ".join(cleaned.replace("?", " ").split())
+        if cleaned:
+            return "latest news " + cleaned
+        return "latest news today"
 
     def _search_query_for_question(self, question):
         lower = question.lower()
